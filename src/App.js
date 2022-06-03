@@ -6,6 +6,7 @@ import CitySearch from "./components/CitySearch";
 function App() {
 
     const [weatherNow, setWeatherNow] = useState({});
+    const [days, setDays] = useState([]);
     const [place, setPlace] = useState('');
 
     const onSearchSubmit = async (searchInputValue) => {
@@ -34,8 +35,7 @@ function App() {
                            </div>
                            <div className="col-4 condition-temp">
                                <p className="condition">{weatherNow.conditions}</p>
-                               <p className="high">Max: 30&deg;C</p>
-                               <p className="low">Min: 27&deg;C</p>
+                               <p className="low">Feels Like: {weatherNow.feelslike}&deg;C</p>
                            </div>
                        </div>
 
