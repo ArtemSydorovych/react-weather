@@ -1,74 +1,62 @@
-import React from 'react'
-import { useState } from 'react'
-import "./styles/weather.css"
+import React, {useState} from 'react'
 import axios from 'axios'
+import './styles/weather.css';
+import CitySearch from "./components/CitySearch";
 
 function App() {
 
-  const [weather, setWeather] = useState('');
-  const [city, setCity] = useState('');
-  const apiKey = process.env.REACT_APP_APIKEY;
+    const [weatherNow, setWeatherNow] = useState({});
+    const [place, setPlace] = useState('');
 
-  const apiCall = async (e) => {
-    e.preventDefault()
-    const loc = e.target.elements.loc.value
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${loc}&appid=${apiKey}`;
-    const req = axios.get(url);
-    const res = await req;
-    setWeather({
-      descp: res.data.weather[0].description,
-      temp: res.data.main.temp,
-      city: res.data.name,
-      humidity: res.data.main.humidity,
-      press: res.data.main.pressure,
-    })
+    const onSearchSubmit = async (searchInputValue) => {
+        const response = await axios.get(`https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/${searchInputValue}?unitGroup=metric&key=QQW5GSLZ7J2ETSQ2J9HKX5ASD&contentType=json`)
 
-    setCity(res.data.name)
+        setWeatherNow(response.data.currentConditions);
+        setPlace(response.data.resolvedAddress);
+    }
 
-  }
+    return (
+        <div className="container my-5">
+            <h1 className="text-center title">Weather in</h1>
+            <CitySearch onSearchSubmit = {onSearchSubmit} />
+           <div>
+               <div className="card rounded my-3 shadow-lg back-card">
+                   <div className="card-top text-center my-3">
+                       <div className="city-name my-3">
+                           {place?   <p>{place}</p> : <span>...</span>}
+                       </div>
+                   </div>
 
-  //Converting K to C
-  let k = weather.temp;
-  let C = k - 273.15
+                   <div className="card-body my-5">
+                       <div className="card-mid row">
+                           <div className="col-8 text-center temp">
+                               <span>{weatherNow.temp}&deg;C</span>
+                           </div>
+                           <div className="col-4 condition-temp">
+                               <p className="condition">{weatherNow.conditions}</p>
+                               <p className="high">Max: 30&deg;C</p>
+                               <p className="low">Min: 27&deg;C</p>
+                           </div>
+                       </div>
 
-  const Weath = () => {
-    return <div>
-      <div className="winfo">
-        Weather information for {city}
-        <hr></hr>
-      </div>
-      <div className="Weath">
-        <div className="welement">
-          Weather : {weather.descp}
+                       <div className="icon-container card shadow mx-auto">
+
+                       </div>
+                       <div className="card-bottom px-5 py-4 row">
+                           <div className="col text-center">
+                               <p>{weatherNow.feelslike}&deg;C</p>
+                               <span>Feels Like</span>
+                           </div>
+                           <div className="col text-center">
+                               <p>{weatherNow.humidity}%</p>
+                               <span>Humidity</span>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
         </div>
-        <div className="welement">
-          Temperature : {C.toFixed(2)} &#8451;
-        </div>
-        <div className="welement">
-          Humidity :{weather.humidity} %
-        </div>
-        <div className="welement">
-          Pressure :  {weather.press} mb
-        </div>
-      </div>
-    </div>
-  }
-  return (<>
-        <div className="weathhead">Weather Info</div>
-        <div className="mainweather">
-          <div className="weather">
-            <form onSubmit={apiCall} className="form">
-              <input type="text"
-                     placeholder="city"
-                     name="loc" />
-              <button className="bttn">Search</button>
-            </form>
-
-            {weather && <Weath />}
-          </div>
-        </div>
-      </>
-  )
+    )
 }
 
 export default App
