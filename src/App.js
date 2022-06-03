@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import axios from 'axios'
 import './styles/weather.css';
+import './styles/weatherIcons.css';
 import CitySearch from "./components/CitySearch";
 
 function App() {
@@ -40,7 +41,7 @@ function App() {
                        </div>
 
                        <div className="icon-container card shadow mx-auto">
-
+                        <div className={weatherNow.conditions} ></div>
                        </div>
                        <div className="card-bottom px-5 py-4 row">
                            <div className="col text-center">
