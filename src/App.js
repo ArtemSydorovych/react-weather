@@ -35,7 +35,7 @@ function App() {
                            </div>
                            <div className="col-4 condition-temp">
                                <p className="condition">{weatherNow.conditions}</p>
-                               <p className="low">Feels Like: {weatherNow.feelslike}&deg;C</p>
+                               {/*<p className="low">Feels Like: {weatherNow.feelslike}&deg;C</p>*/}
                            </div>
                        </div>
 
